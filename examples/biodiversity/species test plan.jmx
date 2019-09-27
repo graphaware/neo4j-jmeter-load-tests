@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2.0-SNAPSHOT 3ee9109">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <org.apache.jmeter.protocol.bolt.config.ConnectionElement guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.config.ConnectionElement" testname="Bolt Connection Configuration" enabled="true">
+        <stringProp name="boltUri">bolt://localhost:7687</stringProp>
+        <stringProp name="password">password</stringProp>
+        <stringProp name="username">neo4j</stringProp>
+      </org.apache.jmeter.protocol.bolt.config.ConnectionElement>
+      <hashTree/>
+      <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+        <stringProp name="delimiter">,</stringProp>
+        <stringProp name="fileEncoding"></stringProp>
+        <stringProp name="filename">species.csv</stringProp>
+        <boolProp name="ignoreFirstLine">true</boolProp>
+        <boolProp name="quotedData">true</boolProp>
+        <boolProp name="recycle">false</boolProp>
+        <stringProp name="shareMode">shareMode.all</stringProp>
+        <boolProp name="stopThread">true</boolProp>
+        <stringProp name="variableNames">SpeciesID,ParkName,Category,Order,Family,ScientificName,CommonNames,RecordStatus,Occurrence,Nativeness,Abundance,Seasonality,ConservationStatus</stringProp>
+        <stringProp name="TestPlan.comments">The dataset can be downloaded here: https://www.kaggle.com/nationalparkservice/park-biodiversity/</stringProp>
+      </CSVDataSet>
+      <hashTree/>
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <org.apache.jmeter.protocol.bolt.sampler.BoltSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.sampler.BoltSampler" testname="Drop database" enabled="false">
+          <stringProp name="cypher">MATCH (n) DETACH DELETE n</stringProp>
+          <stringProp name="params"></stringProp>
+          <boolProp name="recordQueryResults">false</boolProp>
+        </org.apache.jmeter.protocol.bolt.sampler.BoltSampler>
+        <hashTree/>
+        <org.apache.jmeter.protocol.bolt.sampler.BoltSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.sampler.BoltSampler" testname="Create index" enabled="true">
+          <stringProp name="cypher">CREATE CONSTRAINT ON (n:Species) ASSERT n.id IS UNIQUE</stringProp>
+          <stringProp name="params"></stringProp>
+          <boolProp name="recordQueryResults">false</boolProp>
+        </org.apache.jmeter.protocol.bolt.sampler.BoltSampler>
+        <hashTree/>
+        <org.apache.jmeter.protocol.bolt.sampler.BoltSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.sampler.BoltSampler" testname="Create index" enabled="true">
+          <stringProp name="cypher">CREATE CONSTRAINT ON (n:Park) ASSERT n.name IS UNIQUE</stringProp>
+          <stringProp name="params"></stringProp>
+          <boolProp name="recordQueryResults">false</boolProp>
+        </org.apache.jmeter.protocol.bolt.sampler.BoltSampler>
+        <hashTree/>
+        <org.apache.jmeter.protocol.bolt.sampler.BoltSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.sampler.BoltSampler" testname="Create index" enabled="true">
+          <stringProp name="cypher">CREATE CONSTRAINT ON (n:Family) ASSERT n.name IS UNIQUE</stringProp>
+          <stringProp name="params"></stringProp>
+          <boolProp name="recordQueryResults">false</boolProp>
+        </org.apache.jmeter.protocol.bolt.sampler.BoltSampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="false">
+          <boolProp name="displayJMeterProperties">false</boolProp>
+          <boolProp name="displayJMeterVariables">true</boolProp>
+          <boolProp name="displaySystemProperties">false</boolProp>
+        </DebugSampler>
+        <hashTree/>
+        <org.apache.jmeter.protocol.bolt.sampler.BoltSampler guiclass="TestBeanGUI" testclass="org.apache.jmeter.protocol.bolt.sampler.BoltSampler" testname="Import line" enabled="true">
+          <stringProp name="cypher">CALL apoc.create.node(filter(x IN [&apos;Species&apos;, $Category, $Order] WHERE size(x)&gt;0), {scientificName:$ScientificName,commonNames:$CommonNames,status:$RecordStatus}) yield node  MERGE (p:Park{name:$ParkName}) MERGE (f:Family{name:$Family}) MERGE (node)-[:LIVES_IN]-&gt;(p)  MERGE (node)-[:HAS_FAMILY]-&gt;(f) RETURN count(node)</stringProp>
+          <stringProp name="params">{&quot;ParkName&quot;:&quot;${ParkName}&quot;, &quot;Category&quot;:&quot;${Category}&quot;, &quot;Order&quot;:&quot;${Order}&quot;, &quot;Family&quot;:&quot;${Family}&quot;, &quot;ScientificName&quot;:&quot;${ScientificName}&quot;, &quot;CommonNames&quot;:&quot;${CommonNames}&quot;, &quot;RecordStatus&quot;:&quot;${RecordStatus}&quot;}</stringProp>
+          <boolProp name="recordQueryResults">false</boolProp>
+        </org.apache.jmeter.protocol.bolt.sampler.BoltSampler>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">true</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
