@@ -10,12 +10,14 @@ as CSV file, ...
 This repository contains help on how to configure and use JMeter to run Neo4j queries
 through the https://boltprotocol.org/[Bolt protocol].
 
-It uses a custom version of JMeter that handles the bolt protocol,
+[.line-through]#It uses a custom version of JMeter that handles the bolt protocol,
 which can be found at https://github.com/graphaware/jmeter/.
 Check out the build instructions located in the `README-bolt.md`.
 We are working with the JMeter team to integrate bolt into
 the main JMeter codebase, so hopefully, it won't be necessary to run a custom build
-in the future.
+in the future.#
+This is natively supported from JMeter 5.2. Until it's released, you can use the lastest nightly build
+https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/src/dist/build/distributions/apache-jmeter-5.2.0-SNAPSHOT.tgz[here]
 
 Check out the `examples` directory in this repo, and the introduction video
 to load testing a procedure with JMeter: https://youtu.be/Zqyeo0iShF4
@@ -27,4 +29,14 @@ These examples have been created at the occasion of the
 https://globalgraphhack.devpost.com/[2019 Global GraphHack].
 
 Happy load testing!  :rocket:
+
+==== Requirements
+
+To run these test plans, you need a running Neo4j database, with APOC extension installed.
+
+If you don't have a Neo4j database, https://neo4j.com/download/[download a Neo4j Desktop]
+
+Then create a new project and add the APOC plugin to it
+
+image::images/desktop.png[desktop,50%, 50%]
 
