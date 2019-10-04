@@ -10,13 +10,8 @@ as CSV file, ...
 This repository contains help on how to configure and use JMeter to run Neo4j queries
 through the https://boltprotocol.org/[Bolt protocol].
 
-[.line-through]#It uses a custom version of JMeter that handles the bolt protocol,
-which can be found at https://github.com/graphaware/jmeter/.
-Check out the build instructions located in the `README-bolt.md`.
-We are working with the JMeter team to integrate bolt into
-the main JMeter codebase, so hopefully, it won't be necessary to run a custom build
-in the future.#
-This is natively supported from JMeter 5.2. Until it's released, you can use the lastest nightly build
+_It uses a custom version of JMeter that handles the bolt protocol, which can be found at https://github.com/graphaware/jmeter/. Check out the build instructions located in the `README-bolt.md`. We are working with the JMeter team to integrate bolt into the main JMeter codebase, so hopefully, it won't be necessary to run a custom build in the future._
+*This is natively supported from JMeter 5.2 on.* Until it's released, you can use the lastest nightly build
 https://builds.apache.org/job/JMeter-trunk/lastSuccessfulBuild/artifact/src/dist/build/distributions/apache-jmeter-5.2.0-SNAPSHOT.tgz[here]
 
 Check out the `examples` directory in this repo, and the introduction video
